@@ -1,0 +1,12 @@
+node_modules
+dist
+coverage
+.env
+.env.local
+.env.*.local
+npm-debug.log*
+vite.config.ts.timestamp-*
+vite.config.js.timestamp-*
+server/logs
+.logs
+*.tsbuildinfo
