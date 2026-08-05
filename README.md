@@ -22,12 +22,91 @@ Production-style MERN + TypeScript take-home project for exploring SWAPI people,
 
 ## Screenshots
 
-Place real screenshots here after running the app:
+Desktop explorer:
 
-- Desktop home: `docs/screenshots/desktop-home.png`
-- Desktop modal: `docs/screenshots/desktop-modal.png`
-- Mobile home: `docs/screenshots/mobile-home.png`
-- Mobile modal: `docs/screenshots/mobile-modal.png`
+![Desktop explorer](docs/screenshots/desktop-home.png)
+
+Desktop character modal:
+
+![Desktop character modal](docs/screenshots/desktop-modal.png)
+
+Mobile explorer:
+
+![Mobile explorer](docs/screenshots/mobile-home.png)
+
+Mobile character modal:
+
+![Mobile character modal](docs/screenshots/mobile-modal.png)
+
+To refresh screenshots locally after starting the app:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/capture-screenshots.ps1
+```
+
+## Assignment Checklist
+
+### Core Requirements
+
+- [x] React + TypeScript frontend.
+- [x] MERN-style backend with Express, MongoDB, and Mongoose.
+- [x] Public SWAPI people endpoint integration.
+- [x] Supports the assignment API base `https://swapi.info/api`.
+- [x] Supports classic paginated SWAPI mirrors.
+- [x] Pagination for character browsing.
+- [x] Loading state for initial fetches and refetches.
+- [x] Error state with retry for network/API failures.
+- [x] Character cards display each character name.
+- [x] Character cards use random Picsum placeholder images.
+- [x] Character cards are colored by species.
+- [x] Hover/focus animation on character cards.
+- [x] Character card opens a details modal.
+- [x] Modal header displays the character name.
+- [x] Height is formatted in meters.
+- [x] Mass is displayed in kg.
+- [x] Added date is formatted as `dd-MM-yyyy`.
+- [x] Film count is displayed.
+- [x] Birth year is displayed.
+- [x] Homeworld name, terrain, climate, and population/residents are displayed.
+- [x] Responsive desktop and mobile UI.
+- [x] README includes screenshots.
+
+### Brownie Points
+
+- [x] Search by partial or full character name.
+- [x] Filter by species.
+- [x] Filter by film.
+- [x] Filter by homeworld.
+- [x] Combined search and filters.
+- [x] Mock JWT authentication.
+- [x] Silent refresh when access token expires.
+- [x] Login and logout UI.
+- [x] Integration test verifies the modal opens with the correct person details.
+
+### Code Quality
+
+- [x] Type-safe API parsing with Zod.
+- [x] Reusable API clients and query hooks.
+- [x] Centralized error normalization.
+- [x] Backend validation middleware.
+- [x] Secure HTTP-only refresh cookie.
+- [x] Token rotation and refresh-session revocation.
+- [x] Helmet, CORS, rate limiting, and structured logging.
+- [x] Unit, component, integration, and backend API tests.
+- [x] Production deployment configs for frontend and backend.
+
+### Submission Items
+
+- [x] Repository folder uses assignment name format: `tsx-mern-05Aug2026`.
+- [ ] Push code to GitHub.
+- [ ] Add GitHub repository URL above.
+- [ ] Deploy frontend to Netlify/Vercel/Cloudflare Pages.
+- [ ] Deploy backend to a Node host.
+- [ ] Add hosted frontend URL above.
+- [ ] Add backend API URL above.
+- [ ] Record app and code-flow video.
+- [ ] Add video URL above.
+- [ ] Submit the assignment form.
 
 ## Architecture
 
@@ -133,7 +212,6 @@ Troubleshooting: verify CORS `CLIENT_URL` exactly matches the deployed frontend 
 
 - SWAPI filtering is client-side only when species, film, or homeworld filters are active because SWAPI exposes those relations as URLs rather than queryable fields.
 - Picsum images are intentionally placeholders and not Star Wars artwork.
-- Screenshot files are referenced as placeholders until real captures are produced.
 
 ## Future Improvements
 
