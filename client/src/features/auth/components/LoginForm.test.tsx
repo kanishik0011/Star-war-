@@ -19,4 +19,18 @@ describe('LoginForm', () => {
     await userEvent.click(screen.getByRole('button', { name: /sign in/i }));
     expect(await screen.findByText(/valid email/i)).toBeInTheDocument();
   });
+
+  it('allows visitors to continue as a guest', async () => {
+    render(
+      <MemoryRouter>
+        <AuthProvider>
+          <LoginForm />
+        </AuthProvider>
+      </MemoryRouter>,
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: /continue as guest/i }));
+
+    expect(window.localStorage.getItem('swapi-field-guide-guest-session')).toBe('true');
+  });
 });

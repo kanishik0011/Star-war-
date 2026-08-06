@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LogIn } from 'lucide-react';
+import { LogIn, UserRound } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -9,7 +9,7 @@ import { useAuth } from '../hooks/useAuth';
 import { loginSchema, type LoginValues } from '../schemas/loginSchema';
 
 export function LoginForm() {
-  const { login } = useAuth();
+  const { login, continueAsGuest } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [error, setError] = useState<string | null>(null);
@@ -32,6 +32,12 @@ export function LoginForm() {
       setError(normalizeError(requestError).message);
     }
   });
+
+  const handleGuestAccess = () => {
+    setError(null);
+    continueAsGuest();
+    navigate(from, { replace: true });
+  };
 
   return (
     <form onSubmit={onSubmit} className="w-full max-w-md rounded-lg border border-white/15 bg-white/10 p-6 shadow-glow backdrop-blur">
@@ -71,6 +77,14 @@ export function LoginForm() {
       >
         <LogIn size={18} aria-hidden="true" />
         {isSubmitting ? 'Signing in...' : 'Sign in'}
+      </button>
+      <button
+        type="button"
+        onClick={handleGuestAccess}
+        className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-md border border-white/20 px-4 py-2 font-semibold text-slate-100 transition hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-yellow-300"
+      >
+        <UserRound size={18} aria-hidden="true" />
+        Continue as guest
       </button>
     </form>
   );

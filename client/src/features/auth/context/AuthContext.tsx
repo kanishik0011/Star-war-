@@ -12,6 +12,18 @@ import { loginRequest, logoutRequest, refreshRequest } from '../api/authApi';
 import type { User } from '../types/auth';
 import { AuthContext } from './authContextValue';
 
+const GUEST_SESSION_KEY = 'swapi-field-guide-guest-session';
+const guestUser: User = {
+  id: 'guest',
+  email: 'guest@local.app',
+  name: 'Guest Explorer',
+  role: 'guest',
+};
+
+function hasGuestSession() {
+  return window.localStorage.getItem(GUEST_SESSION_KEY) === 'true';
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -19,6 +31,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const refreshPromise = useRef<Promise<string | null> | null>(null);
 
   const clearSession = useCallback(() => {
+    window.localStorage.removeItem(GUEST_SESSION_KEY);
     setUser(null);
     setAccessToken(null);
   }, []);
@@ -27,11 +40,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!refreshPromise.current) {
       refreshPromise.current = refreshRequest()
         .then((response) => {
+          if (hasGuestSession()) {
+            setUser(guestUser);
+            setAccessToken(null);
+            return null;
+          }
           setUser(response.user);
           setAccessToken(response.accessToken);
           return response.accessToken;
         })
         .catch((error: unknown) => {
+          if (hasGuestSession()) {
+            setUser(guestUser);
+            setAccessToken(null);
+            return null;
+          }
           logger.warn('Silent refresh failed', error);
           clearSession();
           return null;
@@ -44,6 +67,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [clearSession]);
 
   useEffect(() => {
+    if (hasGuestSession()) {
+      setUser(guestUser);
+      setAccessToken(null);
+      setIsCheckingSession(false);
+      return;
+    }
     void refreshAccessToken().finally(() => setIsCheckingSession(false));
   }, [refreshAccessToken]);
 
@@ -58,22 +87,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [accessToken]);
 
   const login = useCallback(async (email: string, password: string) => {
+    window.localStorage.removeItem(GUEST_SESSION_KEY);
     const response = await loginRequest(email, password);
     setUser(response.user);
     setAccessToken(response.accessToken);
   }, []);
 
+  const continueAsGuest = useCallback(() => {
+    window.localStorage.setItem(GUEST_SESSION_KEY, 'true');
+    setUser(guestUser);
+    setAccessToken(null);
+  }, []);
+
   const logout = useCallback(async () => {
     try {
-      await logoutRequest();
+      if (accessToken) {
+        await logoutRequest();
+      }
     } finally {
       clearSession();
     }
-  }, [clearSession]);
+  }, [accessToken, clearSession]);
 
   const value = useMemo(
-    () => ({ user, accessToken, isCheckingSession, login, logout }),
-    [accessToken, isCheckingSession, login, logout, user],
+    () => ({ user, accessToken, isCheckingSession, login, continueAsGuest, logout }),
+    [accessToken, continueAsGuest, isCheckingSession, login, logout, user],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

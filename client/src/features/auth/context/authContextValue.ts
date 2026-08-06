@@ -6,6 +6,7 @@ export interface AuthContextValue {
   accessToken: string | null;
   isCheckingSession: boolean;
   login: (email: string, password: string) => Promise<void>;
+  continueAsGuest: () => void;
   logout: () => Promise<void>;
 }
 

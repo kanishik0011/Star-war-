@@ -140,6 +140,8 @@ Password: Falcon123!
 
 The backend returns a short-lived JWT access token and sets a long-lived refresh token in an HTTP-only cookie scoped to `/api/auth`. The client keeps the access token in memory only. On load, the client silently calls `/api/auth/refresh`; if refresh fails, the protected app redirects to login. Refresh rotates the stored token hash and revokes the previous session. Logout revokes the refresh session and clears the cookie.
 
+For frontend-only deployments or API outages, visitors can use **Continue as guest** on the login screen. Guest access is stored locally in the browser and does not call the backend.
+
 ## Species Colours And Images
 
 Empty SWAPI species arrays are treated as `Human`. Known species receive hand-picked accessible palettes; other species use a deterministic hash into the palette set. Picsum image URLs use `https://picsum.photos/seed/{safe-character-name}-{session-seed}/600/400`, where the session seed is generated once per browser session.
