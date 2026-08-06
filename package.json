@@ -2,6 +2,10 @@
   "name": "tsx-mern-05aug2026",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": "22.x",
+    "npm": "10.x"
+  },
   "workspaces": [
     "client",
     "server"
