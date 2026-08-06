@@ -124,7 +124,9 @@ export function CharacterExplorerPage() {
       <section ref={sectionRef} aria-live="polite">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm text-slate-300">
-            {resultCount.toLocaleString()} {resultCount === 1 ? 'character' : 'characters'} found
+            {isInitialLoading
+              ? 'Loading characters...'
+              : `${resultCount.toLocaleString()} ${resultCount === 1 ? 'character' : 'characters'} found`}
           </p>
           {isRefetching || (filtersActive && catalogueQuery.isFetching && !catalogueQuery.isLoading) ? (
             <LoadingIndicator label="Refreshing results..." />

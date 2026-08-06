@@ -10,7 +10,7 @@ import type {
 } from '../types/swapi';
 
 export const swapiClient = axios.create({
-  baseURL: String(import.meta.env.VITE_SWAPI_BASE_URL ?? 'https://swapi.dev/api'),
+  baseURL: String(import.meta.env.VITE_SWAPI_BASE_URL ?? 'https://swapi.info/api'),
   timeout: 12000,
 });
 
